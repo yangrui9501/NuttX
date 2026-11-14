@@ -2309,6 +2309,18 @@ config STM32H7_CUSTOM_CLOCKCONFIG
 	---help---
 		Enables special, board-specific STM32 clock configuration.
 
+config STM32H7_SRAM123EXCLUDE
+	bool "Exclude SRAM1, SRAM2 and SRAM3 from the heap"
+	default n
+	depends on !BUILD_PROTECTED
+	---help---
+		Exclude SRAM1-3 from the HEAP.  The SDMMC1 IDMA cannot access
+		SRAM1-3 (it can only reach AXI SRAM, see ST AN5200), so heap
+		buffers placed there cannot be transferred by DMA and the MMCSD
+		driver falls back to single block transfers.  Excluding SRAM1-3
+		keeps DMA capable heap allocations in AXI SRAM, at the cost of
+		288 KB of heap.
+
 config STM32H7_SRAM4EXCLUDE
 	bool "Exclude SRAM4 from the heap"
 	default y if RPTUN

@@ -80,6 +80,8 @@
  *      There are two contiguous regions of internal SRAM:
  *      SRAM1+SRAM2+SRAM3 and SRAM4 at a separate address.
  *      So, add 2 more to CONFIG_MM_REGIONS.
+ *      Define CONFIG_STM32H7_SRAM123EXCLUDE to exclude SRAM1+SRAM2+SRAM3
+ *      from heap (e.g. when SDMMC1 IDMA buffers are allocated from heap).
  *
  * - Tightly Coupled Memory (TCM RAM), we can use Data TCM (DTCM) for system
  *      heap. Note that DTCM has a number of limitations, for example DMA
@@ -136,6 +138,13 @@
 #  define SRAM_START STM32_SRAM123_BASE
 #  define SRAM_END   (SRAM_START + STM32H7_SRAM123_SIZE - \
                       STM32H7_SRAM3_SIZE)
+#endif
+
+/* SRAM123 to be excluded from the main heap. */
+
+#ifdef CONFIG_STM32H7_SRAM123EXCLUDE
+#  undef SRAM123_START
+#  undef SRAM123_END
 #endif
 
 #undef HAVE_SRAM4
